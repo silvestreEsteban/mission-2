@@ -38,6 +38,17 @@ app.get("/car_value", (req, res) => {
   });
 });
 
+app.get("/toyota", (req, res) => {
+  console.log("toyota endpoint was hit");
+  myPool.query(
+    `SELECT * FROM cars WHERE car_make = "Toyota"`,
+    (err, result) => {
+      if (err) return console.log(err);
+      res.send(result);
+    }
+  );
+});
+
 // PORT //
 
 app
