@@ -15,11 +15,15 @@ test("reward of honda should equal 264.56", () => {
 test("reward of evo should be 1119.75", () => {
   expect(evo_quote).toEqual(1119.75);
 });
-test.todo("test6");
-test.todo("test7");
-test.todo("test8");
-test.todo("test9");
-test.todo("test10");
+test("if input a negative value in either option return null", () => {
+  expect(carQuote(-1, 10)).toBeNull();
+  expect(carQuote(-1, -1)).toBeNull();
+  expect(carQuote(10, -1)).toBeNull();
+  expect(carQuote(1, 1)).not.toBeNull();
+});
+test("result of function should be a number", () => {
+  expect(typeof carQuote()).toBe("number");
+});
 
 const object = {
   car_value: 6614,

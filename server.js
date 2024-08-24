@@ -49,6 +49,28 @@ app.get("/toyota", (req, res) => {
   );
 });
 
+app.get("/quote_information", (req, res) => {
+  console.log("car value and risk rating");
+  myPool.query(
+    `SELECT car_value, risk_rating, car_make, car_model, car_year FROM cars`,
+    (err, result) => {
+      if (err) return console.log(err);
+      res.send(result);
+    }
+  );
+});
+
+fetch(`HTTP://localhost:${PORT}/quote_information`)
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    data.forEach((item) => {
+      console.log(`Car Value: ${item.car_value}, Risk Rating: ${item.risk_rating},
+      Car Make: ${item.car_make}, Car Model: ${item.car_model}, Year: ${item.car_year}`);
+    });
+  })
+  .catch((error) => console.error("Error fetching data", error));
+
 // PORT //
 
 app
