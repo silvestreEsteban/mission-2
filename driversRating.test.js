@@ -17,11 +17,17 @@ describe("The Driver rating", () => {
     expect(result.rating).toBe(1);
   });
 
-  it("should return a rating of 2 for moderate-risk drivers", () => {
+  it("should return a rating of 2 for low/moderate-risk drivers", () => {
     const claimHistory =
-      "In the last 3 years, the driver had 1 accident and 1 claim.";
+      "In the last 3 years, the driver had 1 accidents and 1 claims.";
     const result = rateTheDriver({ claimHistory });
     expect(result.rating).toBe(2);
+  });
+  it("should return a rating of 3 for moderate-risk drivers", () => {
+    const claimHistory =
+      "In the last 3 years, the driver had 2 accidents and 1 claims.";
+    const result = rateTheDriver({ claimHistory });
+    expect(result.rating).toBe(3);
   });
 });
 
@@ -30,3 +36,14 @@ describe("The Driver rating", () => {
 //should return a rating of 5 for high risk drivers
 //should return a rating of 1 for low risk drivers
 //should return a rating of 3 for moderate risk drivers
+
+// const insertDriver = require("./driversRating");
+
+// console.log(" checking new user data updates")
+
+// describe("insertDriver data", () => {
+//   it("should post the new information to the db", () => {
+//     const insertDriver = (userData, callBack)
+//     expect(insertID).toBe(1)
+//   } )
+// })
