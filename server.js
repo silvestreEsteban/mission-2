@@ -60,8 +60,8 @@ const fetchData = () => {
   return fetch(`HTTP://localhost:${PORT}/quote_information`)
     .then((response) => response.json())
     .then((data) => {
-      fetchedData = data; // Store the fetched data in the higher scope variable
-      return data; // Return the data for further use if needed
+      fetchedData = data;
+      return data;
     })
     .catch((error) => console.error("Error fetching data", error));
 };
