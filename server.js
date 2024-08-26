@@ -1,6 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
 const fs = require("fs");
+const { error } = require("console");
 require("dotenv").config();
 const app = express();
 
@@ -81,7 +82,14 @@ fetchData().then((data) => {
     vehicleSupra,
   ] = data;
 
-  console.log(vehicleCivic, vehicleEvo);
+  const lamborghiniYearlyPremium = calculateInsuranceQuote(
+    vehicleLamborghini.car_value,
+    vehicleLamborghini.risk_rating
+  );
+  const lamborghiniMonthlyPremium = lamborghiniYearlyPremium / 12;
+  console.log(
+    `Your ${vehicleLamborghini.car_year} ${vehicleLamborghini.car_make} ${vehicleLamborghini.car_model} is worth a total of $${vehicleLamborghini.car_value}, and you have a Risk Rating of: ${vehicleLamborghini.risk_rating}. Therefore, with our calculations, your yearly premium will be $${lamborghiniYearlyPremium}. Your monthly premium will be $${lamborghiniMonthlyPremium}. Thank you.`
+  );
 });
 // FUNCTION FOR UNIT TESTS
 const calculateInsuranceQuote = (carValue, riskRating) => {
@@ -100,4 +108,18 @@ const calculateInsuranceQuote = (carValue, riskRating) => {
   return yearlyPremium;
 };
 
-module.exports = { calculateInsuranceQuote, fetchData, fetchedData };
+const monthlyInsuranceQuote = (a) => {
+  if (typeof a !== "number") {
+    return "error";
+  }
+  return a / 12;
+};
+
+console.log(monthlyInsuranceQuote(264.56));
+
+module.exports = {
+  calculateInsuranceQuote,
+  fetchData,
+  fetchedData,
+  monthlyInsuranceQuote,
+};

@@ -1,4 +1,9 @@
-const { calculateInsuranceQuote, fetchData, fetchedData } = require("./server");
+const {
+  calculateInsuranceQuote,
+  fetchData,
+  fetchedData,
+  monthlyInsuranceQuote,
+} = require("./server");
 
 test("risk rating can`t be less than 1", () => {
   const mockCarValue = 10000;
@@ -71,4 +76,23 @@ test("if input a negative value in either option return null", () => {
 });
 test("result of function should be a number", () => {
   expect(typeof calculateInsuranceQuote(5000, 4)).toBe("number");
+});
+
+test("input of monthly insurance quote should be a number", () => {
+  let mockValue = 144;
+  let mockString = "hello";
+  let mockBoolean = true;
+  let mockNull = null;
+  let mockUndefined = undefined;
+  expect(monthlyInsuranceQuote(mockValue)).toBe(12);
+  expect(monthlyInsuranceQuote(mockString)).toBe("error");
+  expect(monthlyInsuranceQuote(mockBoolean)).toBe("error");
+  expect(monthlyInsuranceQuote(mockNull)).toBe("error");
+  expect(monthlyInsuranceQuote(mockUndefined)).toBe("error");
+});
+
+test("input should be divided by 12", () => {
+  expect(monthlyInsuranceQuote(120)).toBe(10);
+  expect(monthlyInsuranceQuote(12)).toBe(1);
+  expect(monthlyInsuranceQuote(264.56)).toBe(22.046666666666667);
 });
