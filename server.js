@@ -30,27 +30,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.get("/car_value", (req, res) => {
-  console.log("/car_value endpoint was hit");
-  myPool.query("SELECT car_value FROM cars", (err, result) => {
-    if (err) return console.log(err);
-    res.send(result);
-  });
-});
-
-app.get("/toyota", (req, res) => {
-  console.log("toyota endpoint was hit");
-  myPool.query(
-    `SELECT * FROM cars WHERE car_make = "Toyota"`,
-    (err, result) => {
-      if (err) return console.log(err);
-      res.send(result);
-    }
-  );
-});
-
 app.get("/quote_information", (req, res) => {
-  console.log("car value and risk rating");
   myPool.query(
     `SELECT car_value, risk_rating, car_make, car_model, car_year FROM cars`,
     (err, result) => {
@@ -59,17 +39,6 @@ app.get("/quote_information", (req, res) => {
     }
   );
 });
-
-fetch(`HTTP://localhost:${PORT}/quote_information`)
-  .then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-    data.forEach((item) => {
-      console.log(`Car Value: ${item.car_value}, Risk Rating: ${item.risk_rating},
-      Car Make: ${item.car_make}, Car Model: ${item.car_model}, Year: ${item.car_year}`);
-    });
-  })
-  .catch((error) => console.error("Error fetching data", error));
 
 // PORT //
 
@@ -84,3 +53,51 @@ app
       console.log("Server Error", error);
     }
   });
+
+let fetchedData = [];
+
+const fetchData = () => {
+  return fetch(`HTTP://localhost:${PORT}/quote_information`)
+    .then((response) => response.json())
+    .then((data) => {
+      fetchedData = data; // Store the fetched data in the higher scope variable
+      return data; // Return the data for further use if needed
+    })
+    .catch((error) => console.error("Error fetching data", error));
+};
+
+// Call the fetchData function to fetch and store the data
+fetchData().then((data) => {
+  const [
+    vehicleCivic,
+    vehicleMaserati,
+    vehicleLamborghini,
+    vehicleSkyline,
+    vehicleSubaruWRX,
+    vehicleHyundai,
+    vehicleSuzuki,
+    vehicleCorolla,
+    vehicleEvo,
+    vehicleSupra,
+  ] = data;
+
+  console.log(vehicleCivic, vehicleEvo);
+});
+// FUNCTION FOR UNIT TESTS
+const calculateInsuranceQuote = (carValue, riskRating) => {
+  if (
+    typeof carValue !== "number" ||
+    typeof riskRating !== "number" ||
+    riskRating < 1 ||
+    riskRating > 5 ||
+    carValue < 0
+  ) {
+    return "incorrect input";
+  }
+
+  let yearlyPremium = (carValue * riskRating) / 100;
+  let monthlyPremium = yearlyPremium / 12;
+  return yearlyPremium;
+};
+
+module.exports = { calculateInsuranceQuote, fetchData, fetchedData };

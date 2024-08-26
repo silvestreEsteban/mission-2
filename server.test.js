@@ -1,33 +1,74 @@
-test("risk rating can`t be less than 1 or greater than 5", () => {
-  expect(risk_rating).toBeGreaterThanOrEqualTo(1);
-  expect(risk_rating).toBeLessThanOrEqualTo(5);
+const { calculateInsuranceQuote, fetchData, fetchedData } = require("./server");
+
+test("risk rating can`t be less than 1", () => {
+  const mockCarValue = 10000;
+  let mockRiskRating = 0;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe("incorrect input");
 });
-test("input can only be car_value and risk_rating, otherwise return error", () => {
-  expect(input).toContain("car_value" && "risk_rating");
+
+test("risk rating can't be greater than 5", () => {
+  const mockCarValue = 10000;
+  let mockRiskRating = 6;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe("incorrect input");
 });
+
+test("risk rating is between 1 and 5", () => {
+  const mockCarValue = 10000;
+  let mockRiskRating = 5;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+});
+test("input should be two values, otherwise return error", () => {
+  const mockCarValue = 10000;
+  let mockRiskRating = 4;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+
+  // Testing now with undefined in either input
+
+  result = calculateInsuranceQuote(undefined, mockRiskRating);
+  expect(result).toBe("incorrect input");
+
+  result = calculateInsuranceQuote(mockCarValue, undefined);
+  expect(result).toBe("incorrect input");
+});
+
 test("value of car_value/risk_rating has to be a number", () => {
-  expect(typeof car_value).toBe("number");
-  expect(typeof risk_rating).toBe("number");
+  let result = calculateInsuranceQuote(5000, 3);
+  expect(result).toBe((5000 * 3) / 100);
+  result = calculateInsuranceQuote("String", 3);
+  expect(result).toBe("incorrect input");
+  result = calculateInsuranceQuote(5000, "3");
+  expect(result).toBe("incorrect input");
+  result = calculateInsuranceQuote("5000", "3");
+  expect(result).toBe("incorrect input");
 });
-test("reward of honda should equal 264.56", () => {
-  expect(honda_quote).toEqual(264.56);
+test("yearly quote of honda should equal 264.56", () => {
+  let hondaQuote = {
+    car_value: 6614,
+    risk_rating: 4,
+  };
+  expect(
+    calculateInsuranceQuote(hondaQuote.car_value, hondaQuote.risk_rating)
+  ).toEqual(264.56);
 });
 test("reward of evo should be 1119.75", () => {
-  expect(evo_quote).toEqual(1119.75);
+  let evoQuote = {
+    car_value: 22395,
+    risk_rating: 5,
+  };
+  expect(
+    calculateInsuranceQuote(evoQuote.car_value, evoQuote.risk_rating)
+  ).toEqual(1119.75);
 });
 test("if input a negative value in either option return null", () => {
-  expect(carQuote(-1, 10)).toBeNull();
-  expect(carQuote(-1, -1)).toBeNull();
-  expect(carQuote(10, -1)).toBeNull();
-  expect(carQuote(1, 1)).not.toBeNull();
+  expect(calculateInsuranceQuote(-1, 10)).toBe("incorrect input");
+  expect(calculateInsuranceQuote(-1, -1)).toBe("incorrect input");
+  expect(calculateInsuranceQuote(10, -1)).toBe("incorrect input");
+  expect(calculateInsuranceQuote(1, 1)).not.toBe("incorrect input");
 });
 test("result of function should be a number", () => {
-  expect(typeof carQuote()).toBe("number");
+  expect(typeof calculateInsuranceQuote(5000, 4)).toBe("number");
 });
-
-const object = {
-  car_value: 6614,
-  risk_rating: 2,
-};
-
-console.log(object);
