@@ -87,8 +87,16 @@ fetchData().then((data) => {
     vehicleLamborghini.risk_rating
   );
   const lamborghiniMonthlyPremium = lamborghiniYearlyPremium / 12;
+  const civicYearlyPremium = calculateInsuranceQuote(
+    vehicleCivic.car_value,
+    vehicleCivic.risk_rating
+  );
+  const civicMonthlyPremium = civicYearlyPremium / 12;
   console.log(
     `Your ${vehicleLamborghini.car_year} ${vehicleLamborghini.car_make} ${vehicleLamborghini.car_model} is worth a total of $${vehicleLamborghini.car_value}, and you have a Risk Rating of: ${vehicleLamborghini.risk_rating}. Therefore, with our calculations, your yearly premium will be $${lamborghiniYearlyPremium}. Your monthly premium will be $${lamborghiniMonthlyPremium}. Thank you.`
+  );
+  console.log(
+    `Your ${vehicleCivic.car_year} ${vehicleCivic.car_make} ${vehicleCivic.car_model} is worth a total of $${vehicleCivic.car_value}, and you have a Risk Rating of: ${vehicleCivic.risk_rating}. Therefore, with our calculations, your yearly premium will be $${civicYearlyPremium}. Your monthly premium will be $${civicMonthlyPremium}. Thank you.`
   );
 });
 // FUNCTION FOR UNIT TESTS
