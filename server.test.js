@@ -5,6 +5,7 @@ const {
   monthlyInsuranceQuote,
 } = require("./server");
 
+jest.useFakeTimers();
 test("risk rating can`t be less than 1", () => {
   const mockCarValue = 10000;
   let mockRiskRating = 0;
@@ -48,6 +49,12 @@ test("value of car_value/risk_rating has to be a number", () => {
   result = calculateInsuranceQuote(5000, "3");
   expect(result).toBe("incorrect input");
   result = calculateInsuranceQuote("5000", "3");
+  expect(result).toBe("incorrect input");
+  result = calculateInsuranceQuote(true, "3");
+  expect(result).toBe("incorrect input");
+  result = calculateInsuranceQuote("5000", false);
+  expect(result).toBe("incorrect input");
+  result = calculateInsuranceQuote(null, "3");
   expect(result).toBe("incorrect input");
 });
 test("yearly quote of honda should equal 264.56", () => {
