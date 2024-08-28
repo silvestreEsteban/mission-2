@@ -26,6 +26,7 @@ function rateTheDriver({ claimHistory }) {
 }
 
 module.exports = rateTheDriver;
+
 // ********************************************************************************
 // This portion is refactoring that has not worked
 
