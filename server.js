@@ -100,8 +100,8 @@ fetchData().then((data) => {
   );
   console.table(
     data.map((car) => ({
-      Model: car.car_model,
       Make: car.car_make,
+      Model: car.car_model,
       Year: car.car_year,
       Value: car.car_value,
       Risk: car.risk_rating,
