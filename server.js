@@ -109,6 +109,11 @@ fetchData().then((data) => {
       MonthlyInsurance: monthlyInsuranceQuote(
         calculateInsuranceQuote(car.car_value, car.risk_rating)
       ),
+      MonthlyInsuranceRounded: roundNumber(
+        monthlyInsuranceQuote(
+          calculateInsuranceQuote(car.car_value, car.risk_rating)
+        )
+      ),
     }))
   );
 });
@@ -124,7 +129,6 @@ const calculateInsuranceQuote = (carValue, riskRating) => {
   ) {
     return "incorrect input";
   }
-
   let yearlyPremium = (carValue * riskRating) / 100;
   let monthlyPremium = yearlyPremium / 12;
   return yearlyPremium;
@@ -137,7 +141,10 @@ const monthlyInsuranceQuote = (a) => {
   return a / 12;
 };
 
-console.log(monthlyInsuranceQuote(264.56));
+const roundNumber = (num) => {
+  return parseFloat(num.toFixed(2));
+};
+console.log(roundNumber(monthlyInsuranceQuote(264.56)));
 
 module.exports = {
   calculateInsuranceQuote,
