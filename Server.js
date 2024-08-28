@@ -14,21 +14,7 @@ app.get("/getCarValue/:carModel/:yearofMake", (req, res) => {
   let carModelName = req.params.carModel;
   let yearOfMake = req.params.yearofMake;
   let jsonResult={};
-  if(yearOfMake != null){
-    if(yearOfMake>=0){
-      let carValue=GetCarValue(carModelName, yearOfMake);
-      jsonResult={'car_value':carValue}
-    }
-    else{
-      jsonResult={'error':'year of make cannot be negative'}
-    }
-    
-  }
-
-  else{
-    jsonResult={'error': 'year  of make is null'}
-  }
- 
+  jsonResult=GetCarValue(carModelName, yearOfMake);
   res.status(200).json(jsonResult);
 });
 
@@ -45,9 +31,24 @@ function convertTextToNum(carmodel) {
   return total;
 }
 function getCarValue(carmodel,year){
-  let carModelNum = convertTextToNum(carmodel);
-  let carValue = carModelNum * 100 + parseInt(year);
-  return carValue
+  let jsonResult={};
+  if(year != null){
+    if(year>=0){
+      let carModelNum = convertTextToNum(carmodel);
+      let carValue = carModelNum * 100 + parseInt(year);
+      jsonResult={'car_value':carValue}
+    }
+    else{
+      jsonResult={'error':'year of make cannot be negative'}
+    }
+    
+  }
+
+  else{
+    jsonResult={'error': 'year  of make is null'}
+  }
+  
+  return jsonResult;
 }
 
 // Port

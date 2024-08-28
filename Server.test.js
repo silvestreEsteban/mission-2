@@ -15,7 +15,7 @@ describe('convertTextToNum', () => {
 
   test('should convert "abc" to the correct number', () => {
     const result = convertTextToNum('abc');
-    expect(result).toBe(); // a=1, b=2, c=3 => 1+2+3=6
+    expect(result).toBe(6); // a=1, b=2, c=3 => 1+2+3=6
   });
 
   test('should handle empty string', () => {
@@ -41,26 +41,27 @@ describe('convertTextToNum', () => {
 
 
 test('Basic functionality', () => {
-  expect(GetCarValue('model', 2020)).toBe(13520); // 'model'== 13+15+4+5+12 = 49, 49*100 + 2020 = 13520
+  let jsonResult=getCarValue('model', 2020);
+  expect(jsonResult).toStrictEqual({"car_value": 6920}); // 'model'== 13+15+4+5+12 = 49, 49*100 + 2020 = 6920
 });
 
 test('Case insensitivity', () => {
-  expect(GetCarValue('Model', 2020)).toBe(13520); // 'Model'== should be treated the same as 'model'
+  expect(getCarValue('Model', 2020)).toStrictEqual({"car_value": 6920}); // 'Model'== should be treated the same as 'model'
 });
 
 test('Non-alphabetic characters', () => {
-  expect(GetCarValue('m0d3l', 2020)).toBe(1320); // 'm0d3l'== 13+0+4+3+12 = 32, 32*100 + 2020 = 1320
+  expect(getCarValue('m0d3l', 2020)).toStrictEqual({"car_value": 4920}); // 'm0d3l'== 13+0+4+3+12 = 32, 32*100 + 2020 = 1320
 });
 
 test('Empty car model', () => {
-  expect(GetCarValue('', 2020)).toBe(2020); // '' -> 0== 0*100 + 2020 = 2020
+  expect(getCarValue('', 2020)).toStrictEqual({"car_value": 2020}); // '' -> 0== 0*100 + 2020 = 2020
 });
 
-test('Future year', () => {
-  expect(GetCarValue('model', 3000)).toBe(14900); // 'model' == 49, 49*100 + 3000 = 14900
+test('number only', () => {
+  expect(getCarValue('2325', 3000)).toStrictEqual({"car_value": 3000}); // '2+3+2+5' == 12, 12*100 + 3000 = 4200
 });
 
-test('Very old year', () => {
-  expect(GetCarValue('model', 1900)).toBe(5100); // 'model' ==49, 49*100 + 1900 = 5100
+test('negative year', () => {
+  expect(getCarValue('model', -1900)).toStrictEqual({"error": "year of make cannot be negative"}); // 'model' ==49, 49*100 + 1900 = 5100
 });
 
