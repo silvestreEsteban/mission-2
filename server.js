@@ -127,10 +127,9 @@ const calculateInsuranceQuote = (carValue, riskRating) => {
     riskRating > 5 ||
     carValue < 0
   ) {
-    return "incorrect input";
+    return "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5";
   }
   let yearlyPremium = (carValue * riskRating) / 100;
-  let monthlyPremium = yearlyPremium / 12;
   return yearlyPremium;
 };
 

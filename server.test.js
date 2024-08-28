@@ -5,19 +5,23 @@ const {
   monthlyInsuranceQuote,
 } = require("./server");
 
-jest.useFakeTimers();
+jest.useFakeTimers(); // Was encountering some strange errors and did some googling, this fixed it for me by telling Jest to use fake timers for the tests.
 test("risk rating can`t be less than 1", () => {
   const mockCarValue = 10000;
   let mockRiskRating = 0;
   let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
-  expect(result).toBe("incorrect input");
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 });
 
 test("risk rating can't be greater than 5", () => {
   const mockCarValue = 10000;
   let mockRiskRating = 6;
   let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
-  expect(result).toBe("incorrect input");
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 });
 
 test("risk rating is between 1 and 5", () => {
@@ -26,6 +30,30 @@ test("risk rating is between 1 and 5", () => {
   let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
   expect(result).toBe((mockCarValue * mockRiskRating) / 100);
 });
+
+// The two tests below are new tests written after a code review.
+
+test("testing edge cases, if input is 1 or 5, should work as intended.", () => {
+  const mockCarValue = 10000;
+  let mockRiskRating = 1;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+  mockRiskRating = 5;
+  result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+});
+
+test("testing large inputs for carValue, should work as normal", () => {
+  let mockCarValue = 1000000000000000000000000000000000000000000;
+  let mockRiskRating = 3;
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+  mockCarValue = 999999999999;
+  mockRiskRating = 5;
+  result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+});
+
 test("input should be two values, otherwise return error", () => {
   const mockCarValue = 10000;
   let mockRiskRating = 4;
@@ -35,27 +63,46 @@ test("input should be two values, otherwise return error", () => {
   // Testing now with undefined in either input
 
   result = calculateInsuranceQuote(undefined, mockRiskRating);
-  expect(result).toBe("incorrect input");
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 
   result = calculateInsuranceQuote(mockCarValue, undefined);
-  expect(result).toBe("incorrect input");
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 });
 
 test("value of car_value/risk_rating has to be a number", () => {
-  let result = calculateInsuranceQuote(5000, 3);
-  expect(result).toBe((5000 * 3) / 100);
-  result = calculateInsuranceQuote("String", 3);
-  expect(result).toBe("incorrect input");
-  result = calculateInsuranceQuote(5000, "3");
-  expect(result).toBe("incorrect input");
-  result = calculateInsuranceQuote("5000", "3");
-  expect(result).toBe("incorrect input");
-  result = calculateInsuranceQuote(true, "3");
-  expect(result).toBe("incorrect input");
-  result = calculateInsuranceQuote("5000", false);
-  expect(result).toBe("incorrect input");
-  result = calculateInsuranceQuote(null, "3");
-  expect(result).toBe("incorrect input");
+  let mockCarValue = 5000;
+  let mockRiskRating = 3;
+  let mockString = "String";
+  let result = calculateInsuranceQuote(mockCarValue, mockRiskRating);
+  expect(result).toBe((mockCarValue * mockRiskRating) / 100);
+  result = calculateInsuranceQuote(mockString, mockRiskRating);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  result = calculateInsuranceQuote(mockCarValue, mockString);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  result = calculateInsuranceQuote(mockString, mockString);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  result = calculateInsuranceQuote(true, mockString);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  result = calculateInsuranceQuote(mockString, false);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  result = calculateInsuranceQuote(null, mockString);
+  expect(result).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 });
 test("yearly quote of honda should equal 264.56", () => {
   let hondaQuote = {
@@ -76,10 +123,18 @@ test("reward of evo should be 1119.75", () => {
   ).toEqual(1119.75);
 });
 test("if input a negative value in either option return null", () => {
-  expect(calculateInsuranceQuote(-1, 10)).toBe("incorrect input");
-  expect(calculateInsuranceQuote(-1, -1)).toBe("incorrect input");
-  expect(calculateInsuranceQuote(10, -1)).toBe("incorrect input");
-  expect(calculateInsuranceQuote(1, 1)).not.toBe("incorrect input");
+  expect(calculateInsuranceQuote(-1, 10)).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  expect(calculateInsuranceQuote(-1, -1)).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  expect(calculateInsuranceQuote(10, -1)).toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
+  expect(calculateInsuranceQuote(1, 1)).not.toBe(
+    "incorrect input, it should be a numeric value in each input, and risk rating should be between 1-5"
+  );
 });
 test("result of function should be a number", () => {
   expect(typeof calculateInsuranceQuote(5000, 4)).toBe("number");
