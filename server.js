@@ -98,7 +98,21 @@ fetchData().then((data) => {
   console.log(
     `Your ${vehicleCivic.car_year} ${vehicleCivic.car_make} ${vehicleCivic.car_model} is worth a total of $${vehicleCivic.car_value}, and you have a Risk Rating of: ${vehicleCivic.risk_rating}. Therefore, with our calculations, your yearly premium will be $${civicYearlyPremium}. Your monthly premium will be $${civicMonthlyPremium}. Thank you.`
   );
+  console.table(
+    data.map((car) => ({
+      Model: car.car_model,
+      Make: car.car_make,
+      Year: car.car_year,
+      Value: car.car_value,
+      Risk: car.risk_rating,
+      YearlyInsurance: calculateInsuranceQuote(car.car_value, car.risk_rating),
+      MonthlyInsurance: monthlyInsuranceQuote(
+        calculateInsuranceQuote(car.car_value, car.risk_rating)
+      ),
+    }))
+  );
 });
+
 // FUNCTION FOR UNIT TESTS
 const calculateInsuranceQuote = (carValue, riskRating) => {
   if (
