@@ -61,7 +61,6 @@ test('Future year', () => {
 });
 
 test('Very old year', () => {
-  expect(GetCarValue('model', 1900)).toBe(5100); // 'model' ==
-   49, 49*100 + 1900 = 5100
+  expect(GetCarValue('model', 1900)).toBe(5100); // 'model' ==49, 49*100 + 1900 = 5100
 });
 
