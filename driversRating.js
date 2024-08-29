@@ -1,3 +1,12 @@
+// // Define risk levels
+let rating = 0; // here I declared rating globally, so that I can use it again - I don't know if I will need to yet, but my function was failing whn I only declared the risk levels
+
+const lowRiskDriver = rating <= 1;
+const lowModerateRiskDriver = rating > 1 && rating <= 2;
+const moderateRiskDriver = rating === 3;
+const moderateHighRiskDriver = rating > 3 && rating <= 4;
+const highRiskDriver = rating >= 5;
+
 function rateTheDriver({ claimHistory }) {
   let rating = 5;
   if (
@@ -25,7 +34,36 @@ function rateTheDriver({ claimHistory }) {
   return { rating };
 }
 
-module.exports = rateTheDriver;
+// Annual insurance premium based on the rating from my first function
+const lowRiskPremium = 1000;
+const lowModerateRiskPremium = 1250;
+const moderateRiskPremium = 1500;
+const moderateHighRiskPremium = 2000;
+const highRiskPremium = 2500;
+
+// Function to get the insurance premium based on the driver's risk rating
+function getInsurancePremium(rating) {
+  if (rating <= 1) {
+    return lowRiskPremium;
+  } else if (rating > 1 && rating <= 2) {
+    return lowModerateRiskPremium;
+  } else if (rating === 3) {
+    return moderateRiskPremium;
+  } else if (rating > 3 && rating <= 4) {
+    return moderateHighRiskPremium;
+  } else if (rating >= 5) {
+    return highRiskPremium;
+  } else {
+    return "Invalid rating"; // Return an error message for invalid ratings
+  }
+}
+
+// Example usage
+rating = 3; // Set the rating for testing
+const premium = getInsurancePremium(rating); // Get the insurance premium based on the rating
+console.log(`The annual insurance premium is $${premium}`); // Output the result
+
+(module.exports = rateTheDriver), getInsurancePremium;
 
 // ********************************************************************************
 // This portion is refactoring that has not worked

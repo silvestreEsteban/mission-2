@@ -31,6 +31,16 @@ describe("The Driver rating", () => {
   });
 });
 
+const getInsurancePremium = require("./driversRating");
+describe("Getting the drivers insurance premium", () => {
+  it("should return a rating of low risk premium for a rating of 1", () => {
+    const rating = 1;
+    const expectedPremium = 1000;
+    const result = getInsurancePremium(rating);
+    expect(result).toBe(expectedPremium);
+  });
+});
+
 // This API takes 1 parameters as input in JSON format that has a text field describing the claim history in the last 3 years of a driver requesting for a quote.  The output is a JSON format with the suggested rating of the driver from 1 to 5, 5 being a high risk driver and 1 being a low risk driver.  Here are the example specifications and business rules of conversion:
 
 //should return a rating of 5 for high risk drivers
