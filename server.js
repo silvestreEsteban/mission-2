@@ -4,6 +4,7 @@ const fs = require("fs");
 const { error } = require("console");
 require("dotenv").config();
 const app = express();
+const router = express.Router();
 
 const HOST = process.env.MYSQL_HOST;
 const USER = process.env.MYSQL_USER;
@@ -23,15 +24,14 @@ const myPool = mysql.createPool({
   queueLimit: 0,
 });
 
-app.get("/", (req, res) => {
-  console.log("/ endpoint was hit");
+router.get("/", (req, res) => {
   myPool.query("SELECT * FROM cars", (err, result) => {
     if (err) return console.log(err);
     res.send(result);
   });
 });
 
-app.get("/quote_information", (req, res) => {
+router.get("/quote_information", (req, res) => {
   myPool.query(
     `SELECT car_value, risk_rating, car_make, car_model, car_year FROM cars`,
     (err, result) => {
@@ -41,7 +41,7 @@ app.get("/quote_information", (req, res) => {
   );
 });
 
-// PORT //
+app.use("/", router);
 
 app
   .listen(PORT, () => {
