@@ -1,6 +1,4 @@
-
-# dotenv environment variable files
+node_modules
 .env
-# Dependency directories
-node_modules/
-jspm_packages/
+cert
+codeOverload.js
